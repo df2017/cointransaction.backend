@@ -1,0 +1,13 @@
+### Pycharm ###
+.idea
+
+### Django ###
+*.log
+*.pot
+*.pyc
+.env
+/migrations
+__pycache__
+settingslocal.py
+.env
+*.sqlite3
