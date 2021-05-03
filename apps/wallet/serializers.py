@@ -8,6 +8,7 @@ from django.db import transaction
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         managed = False
         model = User
@@ -61,7 +62,7 @@ class CurrencySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Currency
-        fields = ['id', 'owner', 'name', 'symbol', 'enabled', "address"]
+        fields = ['id', 'owner', 'name', 'symbol', 'enabled', "address", "value"]
 
     @transaction.atomic
     def create(self, validated_data):

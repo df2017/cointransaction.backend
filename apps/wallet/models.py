@@ -3,25 +3,12 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 
 
-CURRENCY = (
-       ('Bitcoin', 'Bitcoin'),
-       ('Ethereum', 'Ethereum'),
-       ('Litecoin', 'Litecoin'),
-       ('Dai', 'Dai'),   
-   )
-
-SYMBOLS = (
-       ('BTC', 'BTC'),
-       ('ETH', 'ETH'),
-       ('LTC', 'LTC'),
-       ('DAI', 'DAI'),   
-   )
 
 class Currency(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50, choices=CURRENCY, default=1,)
-    symbol = models.CharField(max_length=50, choices=SYMBOLS, default=1,)
-    value = models.DecimalField(max_digits=19,  decimal_places=8, blank=True, null=True)
+    name = models.CharField(max_length=50)
+    symbol = models.CharField(max_length=50)
+    value = models.DecimalField(max_digits=19,  decimal_places=2, blank=True, null=True)
     private_key = models.CharField(max_length=300)
     public_key = models.CharField(max_length=300)
     address =  models.CharField(max_length=300, blank=True)
