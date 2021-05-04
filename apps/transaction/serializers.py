@@ -3,6 +3,7 @@ from apps.transaction.models import Transaction, TransactionOutput, TransactionI
 from hashlib import sha256
 from bitcoin import ecdsa_sign
 from apps.blockchain.models import Block
+from apps.wallet.models import Currency
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -51,23 +52,26 @@ class TransactionOutputSerializer(serializers.ModelSerializer):
         txOut.save()
         return txOut
 
-class TransactionInputSerializer(serializers.HyperlinkedModelSerializer):
+class TransactionInputSerializer(serializers.ModelSerializer):
+    transaction_id = TransactionSerializer('hash_tx')
+
     class Meta:
         model = TransactionInput
-        fields = "__all__"
+        fields = ['hash_txIn','transaction_id','index','amount','type_coin']
     
     def create(self, validated_data):
-        inhash = [validated_data['indexIn'], validated_data['amountIn'], validated_data['hash_txOut'],
-                        validated_data['type_coin'], validated_data['private']]
+        private = Currency.objects.get(address=validated_data['hash_txIn'])
+        inhash = [validated_data['index'], validated_data['amount'],
+                        validated_data['type_coin'], private.private_key]
         hash_txIn = sha256(repr(inhash).encode('utf-8')).hexdigest()
-        sign = ecdsa_sign(hash_txIn, validated_data['private'])
-
+        sign = ecdsa_sign(hash_txIn, private.private_key)
+        txID = validated_data['transaction_id']['hash_tx']
+        transaction = Transaction.objects.get(hash_tx=txID)
         txIn = TransactionInput.objects.create(
-            transaction_id=validated_data['id_tx'],
-            index=validated_data['indexIn'],
-            txOut_id=validated_data['hash_txOut'],
+            transaction_id=transaction,
+            index=validated_data['index'],
             hash_txIn=hash_txIn,
-            amount=validated_data['amountIn'],
+            amount=validated_data['amount'],
             type_coin=validated_data['type_coin'],
             sigscript=sign
         )

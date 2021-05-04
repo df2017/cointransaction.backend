@@ -27,6 +27,7 @@ class TransactionOutput(models.Model):
     address = models.CharField(max_length=300)
     amount = models.DecimalField(max_digits=30, decimal_places=8)
     type_coin = models.CharField(max_length=4)
+    hash_txIn = models.CharField(max_length=300, blank=True, null=True)
     spent = models.BooleanField(default=False)
 
     def __str__(self):
@@ -39,17 +40,16 @@ class TransactionOutputAdmin(admin.ModelAdmin):
 class TransactionInput(models.Model):
     transaction_id = models.ForeignKey(Transaction, on_delete=models.CASCADE)
     index =  models.IntegerField()
-    txOut_id = models.ForeignKey(TransactionOutput, on_delete=models.CASCADE)
     hash_txIn = models.CharField(max_length=300)
     amount = models.DecimalField(max_digits=30, decimal_places=8)
-    type_coin = models.ForeignKey(Currency, on_delete=models.CASCADE)
+    type_coin =  models.CharField(max_length=4)
     sigscript = models.CharField(max_length=300)
 
     def __str__(self):
         return self.hash_txIn
     
 class TransactionInputAdmin(admin.ModelAdmin):
-    list_display = ('transaction_id', 'txOut_id', 'hash_txIn', 'amount', 'type_coin')
+    list_display = ('transaction_id', 'hash_txIn', 'amount', 'type_coin')
 
 
 

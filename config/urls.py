@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 from apps.wallet.views import RegisterViewSet, WalletViewSet, CurrencyViewSet, UserViewSet, ConnectoWalletCurrencyViewSet
-from apps.transaction.views import TransactionViewSet, TransactionOutputViewSet, TransactionInputViewSet, CreateTransaccionBuy
+from apps.transaction.views import TransactionViewSet, TransactionOutputViewSet, TransactionInputViewSet
 from apps.blockchain.views import BlockViewSet
 
 router = routers.DefaultRouter()
@@ -28,5 +28,4 @@ urlpatterns = [
     path('api/v1/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/v1/register/', RegisterViewSet.as_view(), name='auth_register'),
-    path('api/v1/buy/', CreateTransaccionBuy.as_view(), name='buy_cripto'),
 ]
