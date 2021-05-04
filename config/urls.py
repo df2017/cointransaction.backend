@@ -10,6 +10,8 @@ from rest_framework_simplejwt.views import (
 from apps.wallet.views import RegisterViewSet, WalletViewSet, CurrencyViewSet, UserViewSet, ConnectoWalletCurrencyViewSet
 from apps.transaction.views import TransactionViewSet, TransactionOutputViewSet, TransactionInputViewSet
 from apps.blockchain.views import BlockViewSet
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 
@@ -29,3 +31,5 @@ urlpatterns = [
     path('api/v1/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/v1/register/', RegisterViewSet.as_view(), name='auth_register'),
 ]
+
+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
